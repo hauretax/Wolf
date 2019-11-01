@@ -6,7 +6,7 @@
 /*   By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 13:12:05 by hutricot          #+#    #+#             */
-/*   Updated: 2019/11/01 15:58:07 by hutricot         ###   ########.fr       */
+/*   Updated: 2019/11/01 16:16:17 by hutricot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,5 +156,19 @@ int		ft_deal_key(int key, t_all *al)
 		ft_deal_key_is_playing(al, key);
     else if (key == 49)
 		ft_key_49(al);
+	return (0);
+}
+
+/*
+** mousse mooving
+*/
+
+int		ft_mouse_motion(int x, int y, t_all *al)
+{
+	if (al->p.is_playing == 1)
+	{
+		al->p.c_o = (double)x / WIDTH * 6 + y * 0;
+		ft_raycasting(al);
+	}
 	return (0);
 }

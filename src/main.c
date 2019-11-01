@@ -6,7 +6,7 @@
 /*   By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 11:01:37 by hutricot          #+#    #+#             */
-/*   Updated: 2019/11/01 15:51:57 by hutricot         ###   ########.fr       */
+/*   Updated: 2019/11/01 16:14:59 by hutricot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int		main(int ac, char **av)
 		ft_check_map(&al);
 		ft_print_map(&al);
 		mlx_hook(al.m.win, 2, 0, ft_deal_key, &al);
-		//mlx_hook(al.m.win, 6, 0, ft_mouse_motion, &al);
+		mlx_hook(al.m.win, 6, 0, ft_mouse_motion, &al);
 		mlx_hook(al.m.win, 17, 0, ft_exit, (void *)0);
 		mlx_loop(al.m.ptr);
 	}/*

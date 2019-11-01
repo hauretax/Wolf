@@ -6,7 +6,7 @@
 /*   By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 11:03:11 by hutricot          #+#    #+#             */
-/*   Updated: 2019/11/01 15:42:00 by hutricot         ###   ########.fr       */
+/*   Updated: 2019/11/01 16:15:49 by hutricot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ void	ft_map_generator(t_all *al);
 */
 
 int		ft_deal_key(int key, t_all *al);
+int		ft_mouse_motion(int x, int y, t_all *al);
 
 /*
 **print on sccreen

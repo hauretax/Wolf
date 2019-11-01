@@ -6,17 +6,11 @@
 /*   By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 11:56:38 by hutricot          #+#    #+#             */
-/*   Updated: 2019/11/01 14:39:38 by hutricot         ###   ########.fr       */
+/*   Updated: 2019/11/01 16:09:22 by hutricot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
-
-void	ft_print_maze_text(t_all *al)
-{
-	MSP(al->m.ptr, al->m.win, 500, 200, 0xFFFFFF, "Press 'Space' to play");
-	MSP(al->m.ptr, al->m.win, 500, 225, 0xFFFFFF, "Press 'ESC' to exit");
-}
 
 void	ft_print_player(t_all *al)
 {
@@ -61,7 +55,8 @@ void	ft_print_map_split_2(t_all *al)
 
 void	ft_print_map(t_all *al)
 {
-	ft_print_maze_text(al);
+	MSP(al->m.ptr, al->m.win, 500, 200, 0xFFFFFF, "Press 'Space' to play");
+	MSP(al->m.ptr, al->m.win, 500, 225, 0xFFFFFF, "Press 'ESC' to exit");
 	al->v.i = -1;
 	al->v.j = 0;
 	while (++al->v.i < 1639)

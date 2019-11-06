@@ -6,7 +6,7 @@
 /*   By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 13:12:05 by hutricot          #+#    #+#             */
-/*   Updated: 2019/11/01 16:16:17 by hutricot         ###   ########.fr       */
+/*   Updated: 2019/11/06 19:52:13 by hutricot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	ft_deal_key_split_init(t_all *al)
 	al->p.x = 0;
 	al->p.y = 0;
 	al->p.tmp = 0;
-	al->p.distance = 0;
+	al->p.d = 0;
 	al->p.cos = cos(al->p.radian);
 	al->p.sin = sin(al->p.radian);
 }
@@ -52,13 +52,13 @@ void	ft_deal_key_split(t_all *al, double x, double y)
 	while (al->p.radian < M_PI + al->p.c_o - M_PI / WIDTH * 3)
 	{
 		ft_deal_key_split_init(al);
-		while (al->p.tmp < 40 && al->p.distance < 0.01)
+		while (al->p.tmp < 40 && al->p.d < 0.01)
 		{
 			al->p.y = al->p.tmp;
 			al->p.x = al->p.tmp * al->p.cos - al->p.y * al->p.sin + al->p.cx;
 			al->p.y = al->p.tmp * al->p.sin + al->p.y * al->p.cos + al->p.cy;
 			al->p.tmp += 0.001;
-			al->p.distance = sqrt((al->p.x - al->p.cx) * (al->p.x - al->p.cx)
+			al->p.d = sqrt((al->p.x - al->p.cx) * (al->p.x - al->p.cx)
 					+ (al->p.y - al->p.cy) * (al->p.y - al->p.cy));
 			if (al->p.x >= 40 || al->p.y >= 40 || al->p.y < 0 || al->p.x < 0
 					|| al->u.map[(int)al->p.x + (int)al->p.y * 41] == '0')

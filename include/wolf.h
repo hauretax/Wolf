@@ -6,7 +6,7 @@
 /*   By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 11:03:11 by hutricot          #+#    #+#             */
-/*   Updated: 2019/11/01 16:15:49 by hutricot         ###   ########.fr       */
+/*   Updated: 2019/11/06 19:51:00 by hutricot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct   s_pla
 	double	cx;
 	double	cy;
 	double	radian;
-	double	distance;
+	double	d;
 	double	tmp;
 	double	sin;
 	double	cos;

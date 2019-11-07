@@ -6,7 +6,7 @@
 /*   By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 11:03:11 by hutricot          #+#    #+#             */
-/*   Updated: 2019/11/06 19:51:00 by hutricot         ###   ########.fr       */
+/*   Updated: 2019/11/07 15:16:35 by hutricot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ typedef struct  s_mlx
 	int		*str;
 	void	*isky;
 	int		*ssky;
-	void	*img_wall;
-	int		*str_wall;
 	int		bpp;
 	int		sl;
 	int		e;
@@ -46,8 +44,10 @@ typedef struct  s_mlx
 ** ppx = player position x
 ** ppy = player position y
 ** c_o = cameras orientation
-** cx = cameras x
-** c_y = camera y
+** cx = point cameras x
+** cy = point cameras y
+** x  = point hit en x
+** y  = point hit en y;
 ** pw = pixel width
 ** de = distance ecran
 */

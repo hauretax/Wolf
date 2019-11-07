@@ -6,7 +6,7 @@
 /*   By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 15:10:35 by hutricot          #+#    #+#             */
-/*   Updated: 2019/11/06 20:28:26 by hutricot         ###   ########.fr       */
+/*   Updated: 2019/11/07 15:18:54 by hutricot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,21 @@ void	ft_raycasting_init_2(t_all *al)
 
 void	find_wall(t_all *al)
 {
-	printf("x:%f y:%f\n", al->p.cos,al->p.sin);
+	//printf("%f\n", al->p.cos,al->p.sin);
 	al->x_save = al->p.x;
 	al->y_save = al->p.y;
 	al->p.y = al->p.tmp;
 	al->p.x = al->p.tmp * al->p.cos - al->p.y * al->p.sin + al->p.cx;
 	al->p.y = al->p.tmp * al->p.sin + al->p.y * al->p.cos + al->p.cy;
-	al->p.tmp += 0.1;
+	al->p.tmp += 0.001;
 }
 
 void	ft_raycasting_init_4(t_all *al)
 {
-	al->p.d = al->p.d * cos(al->p.c_o + M_PI / 6
-	- al->p.radian);
+	
+	al->p.d = al->p.d * cos(al->p.c_o + M_PI / 6 - al->p.radian);
 	al->u.h_p = (al->p.de * al->u.h_m/ al->p.d);
-	al->t= (HEIGHT / 2 + al->u.h_p / 2) - (HEIGHT / 2
-	- al->u.h_p / 2);
+	al->t= (HEIGHT / 2 + al->u.h_p / 2) - (HEIGHT / 2 - al->u.h_p / 2);
 	if (al->t> HEIGHT)
 		al->t= al->t- HEIGHT;
 	else
@@ -66,6 +65,7 @@ void	ft_raycasting_init_4(t_all *al)
 
 void	ft_raycasting_init_5(t_all *al)
 {
+	
 	al->p.d = al->p.d * cos(al->p.c_o + M_PI / 6
 	- al->p.radian);
 	al->u.h_p = (al->p.de * al->u.h_m/ al->p.d);
@@ -76,7 +76,7 @@ void	ft_raycasting_init_5(t_all *al)
 	al->v.i = 0;
 }
 
-void	ft_raycasting_set_skybox(t_all *al)
+void	draw_skybox(t_all *al)
 {
 	while (al->v.i < HEIGHT / 2 - al->u.h_p / 2)
 	{
@@ -88,7 +88,7 @@ void	ft_raycasting_set_skybox(t_all *al)
 	}
 }
 
-void	ft_raycasting_set_land(t_all *al)
+void	draw_land(t_all *al)
 {
 	while (al->v.i < HEIGHT)
 	{
@@ -98,39 +98,32 @@ void	ft_raycasting_set_land(t_all *al)
 	}
 }
 
-void	ft_raycasting_walls_out_map(t_all *al)
-{
-	while (al->v.i < HEIGHT / 2 + al->u.h_p / 2)
-	{
-		al->m.str[al->p.pw + (int)al->v.i * WIDTH] =
-		al->m.str_wall[(int)(al->n + al->t/ 2 * al->sy) * al->u.ww];
-		al->v.i++;
-		al->n = al->n + al->sy;
-	}
-}
+/*
+**posisbliter d implemanter les coin 
+** pour le moment c est moche
+**if (fmod (al->p.x, 1) < 0.001 && fmod (al->p.x, 1) > -0.001 && 
+**fmod (al->p.y, 1) < 0.001 && fmod (al->p.y, 1) > -0.001)
+**		while (++al->v.i < (HEIGHT / 2 + (al->u.h_p / 2)))
+**			al->m.str[al->p.pw + (int)al->v.i * WIDTH] = 0x000000;
+*/
 
 void	draw_wall(t_all *al)
 {
 	int colour;
+	int i;
+
+	i = 0;
 	if (abs((int)al->x_save - (int)al->p.x) >= abs((int)al->y_save - (int)al->p.y))
-	{
-		if(al->p.cx <= al->p.x)
-			colour = 0xff0000;
-		else
-			colour = 0x0015ff;
-	}
+		colour = (al->p.cx <= al->p.x)? 0xff0000 : 0x0015ff;
 	if (abs((int)al->x_save - (int)al->p.x) <= abs((int)al->y_save - (int)al->p.y))
-	{
-		if (al->p.cy <= al->p.y)
-			colour = 0x1aff00;
-		else
-			colour = 0x951ABC;
-	}
-	while (al->v.i < HEIGHT / 2 + (al->u.h_p / 2))
-	{
-			al->m.str[al->p.pw + (int)al->v.i * WIDTH] = colour;
-		al->v.i++;
-	}
+		colour = (al->p.cy <= al->p.y)? 0x1aff00 : 0x951ABC;
+	while (++i < 5 - al->p.d / 2)
+		al->m.str[al->p.pw + (int)++al->v.i * WIDTH] = 0x000000;
+	while (++al->v.i < (HEIGHT / 2 + (al->u.h_p / 2)))
+		al->m.str[al->p.pw + (int)al->v.i * WIDTH] = colour;
+	al->v.i -= i;
+	while (--i > 0)
+		al->m.str[al->p.pw + (int)++al->v.i * WIDTH] = 0x000000;
 }
 
 void	ft_raycasting_end(t_all *al)
@@ -150,20 +143,22 @@ int		ft_raycasting_set_map_str(t_all *al)
 {
 	al->p.d = sqrt((al->p.x - al->p.cx) * (al->p.x - al->p.cx)
 	+ (al->p.y - al->p.cy) * (al->p.y - al->p.cy));
+	//printf("d : %f, da: %f\n", (((al->p.cx * al->p.x) + (al->p.cy * al->p.y) + (al->p.x)) /((al->p.cx * al->p.sin) + (al->p.cy * al->p.cos)), al->p.d));
 	if (al->p.x >= 40 || al->p.y >= 40 || al->p.y < 0 || al->p.x < 0)
 	{
 		ft_raycasting_init_4(al);
-		ft_raycasting_set_skybox(al);
-		ft_raycasting_walls_out_map(al);
-		ft_raycasting_set_land(al);
+		draw_skybox(al);
+		while (++al->v.i < HEIGHT / 2 + al->u.h_p / 2)
+			al->m.str[al->p.pw + (int)al->v.i * WIDTH] = 0x0;
+		draw_land(al);
 		return (1);
 	}
 	else if (al->u.map[(int)al->p.x + (int)al->p.y * 41] == '0')
 	{
 		ft_raycasting_init_5(al);
-		ft_raycasting_set_skybox(al);
+		draw_skybox(al);
 		draw_wall(al);
-		ft_raycasting_set_land(al);
+		draw_land(al);
 		return (1);
 	}
 	return (0);

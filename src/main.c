@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/01 11:01:37 by hutricot          #+#    #+#             */
-/*   Updated: 2019/11/01 16:14:59 by hutricot         ###   ########.fr       */
+/*   Created: 2019/11/07 15:15:31 by hutricot          #+#    #+#             */
+/*   Updated: 2019/11/07 15:15:55 by hutricot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "wolf.h"
 
@@ -38,10 +39,6 @@ void	ft_init(t_all *al, char **av)
 	if (!(al->m.isky = MX(al->m.ptr, "./t/skybox.xpm", &al->u.sw, &al->u.sh)))
 		ft_exit();
 	al->m.ssky = (int*)MG(al->m.isky, &al->m.bpp, &al->m.sl, &al->m.e);
-	if (!(al->m.img_wall = MX(al->m.ptr, "./t/wall.xpm", &al->u.ww, &al->u.wh)))
-		ft_exit();
-	al->m.str_wall = (int*)MG(al->m.img_wall,
-	&al->m.bpp, &al->m.sl, &al->m.e);
 	al->m.win = mlx_new_window(al->m.ptr, WIDTH, HEIGHT, "mlx wolf3d");
 }
 
@@ -63,4 +60,3 @@ int		main(int ac, char **av)
 		ft_exit();*/
 	return (0);
 }
-

@@ -6,7 +6,7 @@
 /*   By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 11:56:38 by hutricot          #+#    #+#             */
-/*   Updated: 2019/11/01 16:09:22 by hutricot         ###   ########.fr       */
+/*   Updated: 2019/11/08 19:37:28 by hutricot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,20 @@
 
 void	ft_print_player(t_all *al)
 {
-	al->p.ppx = (440 / 40 * al->p.cx) + 20;
-	al->p.ppy = (440 / 40 * al->p.cy) + 20;
-	MPP(al->m.ptr, al->m.win, al->p.ppx, al->p.ppy, 0x004DFF);
-	MPP(al->m.ptr, al->m.win, al->p.ppx + 1, al->p.ppy, 0x004DFF);
-	MPP(al->m.ptr, al->m.win, al->p.ppx - 1, al->p.ppy, 0x004DFF);
-	MPP(al->m.ptr, al->m.win, al->p.ppx + 1, al->p.ppy + 1, 0x004DFF);
-	MPP(al->m.ptr, al->m.win, al->p.ppx - 1, al->p.ppy + 1, 0x004DFF);
-	MPP(al->m.ptr, al->m.win, al->p.ppx, al->p.ppy - 1, 0x004DFF);
-	MPP(al->m.ptr, al->m.win, al->p.ppx, al->p.ppy + 1, 0x004DFF);
-	MPP(al->m.ptr, al->m.win, al->p.ppx + 1, al->p.ppy - 1, 0x004DFF);
-	MPP(al->m.ptr, al->m.win, al->p.ppx - 1, al->p.ppy - 1, 0x004DFF);
+	double a;
+	double b;
+
+	a = (440 / 40 * al->p.cx) + 20;
+	b = (440 / 40 * al->p.cy) + 20;
+	MPP(al->m.ptr, al->m.win, a, b, 0x004DFF);
+	MPP(al->m.ptr, al->m.win, a + 1, b, 0x004DFF);
+	MPP(al->m.ptr, al->m.win, a - 1, b, 0x004DFF);
+	MPP(al->m.ptr, al->m.win, a + 1, b + 1, 0x004DFF);
+	MPP(al->m.ptr, al->m.win, a - 1, b + 1, 0x004DFF);
+	MPP(al->m.ptr, al->m.win, a, b - 1, 0x004DFF);
+	MPP(al->m.ptr, al->m.win, a, b + 1, 0x004DFF);
+	MPP(al->m.ptr, al->m.win, a + 1, b - 1, 0x004DFF);
+	MPP(al->m.ptr, al->m.win, a - 1, b - 1, 0x004DFF);
 }
 
 void	ft_print_map_split_1(t_all *al)
@@ -83,12 +86,12 @@ void	ft_check_map(t_all *al)
 		if (al->u.map[i] == '\n')
 		{
 			if ((i++ - j++) % 40 != 0)
-				ft_exit();
+				ft_exit(al,1);
 		}
 		if (al->u.map[i] != '1' && al->u.map[i] != '0')
-			ft_exit();
+			ft_exit(al,1);
 	    i++;
 	}
 	if (al->u.map[1640] != '\0')
-		ft_exit();
+		ft_exit(al, 1);
 }

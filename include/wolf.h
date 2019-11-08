@@ -6,7 +6,7 @@
 /*   By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 11:03:11 by hutricot          #+#    #+#             */
-/*   Updated: 2019/11/07 15:16:35 by hutricot         ###   ########.fr       */
+/*   Updated: 2019/11/08 19:37:37 by hutricot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define    MG   mlx_get_data_addr
 # define    MPP  mlx_pixel_put
 # define    MSP  mlx_string_put
+# define	DE 1
 
 typedef struct  s_mlx
 {
@@ -48,8 +49,7 @@ typedef struct  s_mlx
 ** cy = point cameras y
 ** x  = point hit en x
 ** y  = point hit en y;
-** pw = pixel width
-** de = distance ecran
+** pw = pixel x
 */
 
 typedef struct   s_pla
@@ -65,11 +65,8 @@ typedef struct   s_pla
 	double	sin;
 	double	cos;
 	double	c_o;
-	double	de;
     int     pw;
 	int		is_playing;
-	int		ppx;
-	int		ppy;
 }                t_pla;
 
 typedef struct  s_var
@@ -82,8 +79,8 @@ typedef struct  s_var
 
 
 /*
-** first : s = sky w = wall second : w = width h = heigth 
-** exemple : sw = sky width 
+** h = heigth wall 
+** sw = sky width 
 ** hm = hauteur_mur
 ** hp = hauteur prevus
 */
@@ -94,9 +91,6 @@ typedef struct   s_uti
 	char	map[1641];
 	int		sw;
 	int		sh;
-	int		ww;
-	int		wh;
-    int     h_m;
     int     h_p;
 }                t_uti;
 
@@ -145,6 +139,6 @@ int		ft_mouse_motion(int x, int y, t_all *al);
 
 void	ft_raycasting(t_all *al);
 
-int		ft_exit(void);
+int		ft_exit(t_all *al, int i);
 
 #endif

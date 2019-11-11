@@ -6,7 +6,7 @@
 /*   By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 11:03:11 by hutricot          #+#    #+#             */
-/*   Updated: 2019/11/08 19:37:37 by hutricot         ###   ########.fr       */
+/*   Updated: 2019/11/11 20:17:50 by hutricot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define    MPP  mlx_pixel_put
 # define    MSP  mlx_string_put
 # define	DE 1
+# define	S 0.1
 
 typedef struct  s_mlx
 {
@@ -54,7 +55,6 @@ typedef struct  s_mlx
 
 typedef struct   s_pla
 {
-	double	s;
 	double	x;
 	double	y;
 	double	cx;
@@ -116,8 +116,8 @@ typedef struct	s_all
 ** creat a map
 */
 
-void	ft_check_map(t_all *al);
-void	ft_print_map(t_all *al);
+void	check_map(t_all *al);
+void	print_map(t_all *al);
 
 /*
 ** generting map
@@ -131,14 +131,24 @@ void	ft_map_generator(t_all *al);
 */
 
 int		ft_deal_key(int key, t_all *al);
-int		ft_mouse_motion(int x, int y, t_all *al);
+int		mouse_motion(int x, int y, t_all *al);
+void	key_when_playing(t_all *al, int key);
+
+/*
+** mooving
+*/
+
+void	axe_y(t_all *al, int a);
+void	right(t_all *al, int a);
+void	up(t_all *al);
+void	left(t_all *al);
 
 /*
 **print on sccreen
 */
 
+void	init_ray(t_all *al);
 void	ft_raycasting(t_all *al);
-
 int		ft_exit(t_all *al, int i);
 
 #endif

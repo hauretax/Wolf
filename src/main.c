@@ -6,7 +6,7 @@
 /*   By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 15:15:31 by hutricot          #+#    #+#             */
-/*   Updated: 2019/11/08 19:30:19 by hutricot         ###   ########.fr       */
+/*   Updated: 2019/11/11 13:45:33 by hutricot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int		ft_exit(t_all *al, int i)
 ** MX and MG be define in include/wolf.h
 */
 
-void	ft_init(t_all *al, char **av)
+void	init_var(t_all *al, char **av)
 {
 	al->u.fd = open(av[1], 0);
 	read(al->u.fd, al->u.map, 1640);
@@ -42,7 +42,6 @@ void	ft_init(t_all *al, char **av)
 	al->m.ptr = mlx_init();
 	al->p.cx = 1.5;
 	al->p.cy = 1.5;
-	al->p.s = 0.1;
 	al->p.is_playing = 0;
 	al->p.c_o = 0.25;
 	al->u.map[0] = '1';
@@ -60,11 +59,11 @@ int		main(int ac, char **av)
 
 	if (ac == 2)
 	{
-		ft_init(&al, av);
-		ft_check_map(&al);
-		ft_print_map(&al);
+		init_var(&al, av);
+		check_map(&al);
+		print_map(&al);
 		mlx_hook(al.m.win, 2, 0, ft_deal_key, &al);
-		mlx_hook(al.m.win, 6, 0, ft_mouse_motion, &al);
+		mlx_hook(al.m.win, 6, 0, mouse_motion, &al);
 		mlx_hook(al.m.win, 17, 0, ft_exit, (void *)0);
 		mlx_loop(al.m.ptr);
 	}

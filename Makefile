@@ -6,7 +6,7 @@
 #    By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/01 10:51:52 by hutricot          #+#    #+#              #
-#    Updated: 2019/11/01 15:14:06 by hutricot         ###   ########.fr        #
+#    Updated: 2019/11/11 18:03:00 by hutricot         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,8 @@ HEADERS = $(addprefix $(HEADERS_DIR), $(HEADERS_LIST))
 SRC_LIST = main.c			\
 			do_a_map.c		\
 			key.c			\
-			raycasting.c
+			raycasting.c	\
+			mooving.c
 
 SRC_DIR = ./src/
 SRC = $(addprefix $(SRC_DIR), $(SRC_LIST))

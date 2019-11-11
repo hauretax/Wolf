@@ -6,13 +6,13 @@
 /*   By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 15:10:35 by hutricot          #+#    #+#             */
-/*   Updated: 2019/11/08 19:26:40 by hutricot         ###   ########.fr       */
+/*   Updated: 2019/11/11 20:04:33 by hutricot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-void	ft_raycasting_init_2(t_all *al)
+void	init_ray(t_all *al)
 {
 	al->p.x = 0;
 	al->p.y = 0;
@@ -173,7 +173,7 @@ void	ft_raycasting(t_all *al)
 	while (al->p.radian < M_PI / 3 + al->p.c_o
 		- (M_PI / 3) / WIDTH)
 	{
-		ft_raycasting_init_2(al);
+		init_ray(al);
 		while (al->p.tmp < 40)
 		{
 			find_wall(al);

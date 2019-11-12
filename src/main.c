@@ -6,7 +6,7 @@
 /*   By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 15:15:31 by hutricot          #+#    #+#             */
-/*   Updated: 2019/11/11 13:45:33 by hutricot         ###   ########.fr       */
+/*   Updated: 2019/11/12 16:52:21 by hutricot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ int		ft_exit(t_all *al, int i)
 	if (i == 1)
 	{
 		write(2, "Error! Something wrong\n", 23);
+		mlx_destroy_image(al->m.ptr, al->m.img);
 		mlx_destroy_window(al->m.ptr, al->m.win);
+		while(1);
 	}
 	if (i == 2)
 	{
@@ -36,8 +38,10 @@ int		ft_exit(t_all *al, int i)
 
 void	init_var(t_all *al, char **av)
 {
-	al->u.fd = open(av[1], 0);
-	read(al->u.fd, al->u.map, 1640);
+	int fd;
+	fd = open(av[1], 0);
+	read(fd, al->u.map, 1640);
+	close(fd);
 	al->u.map[1640] = 0;
 	al->m.ptr = mlx_init();
 	al->p.cx = 1.5;

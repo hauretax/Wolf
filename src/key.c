@@ -6,7 +6,7 @@
 /*   By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/01 13:12:05 by hutricot          #+#    #+#             */
-/*   Updated: 2019/11/11 20:18:32 by hutricot         ###   ########.fr       */
+/*   Updated: 2019/11/12 15:23:59 by hutricot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@ void	key_when_playing(t_all *al, int key)
 	else if (key == 14)
 	{
 		al->p.c_o += S / 2;
-		ft_raycasting(al);
+		raycasting(al);
 	}
 	else if (key == 12)
 	{
 		al->p.c_o -= S / 2;
-		ft_raycasting(al);
+		raycasting(al);
 	}
-	(key == 126 || key == 13) ? axe_y(al , 1) : 0;
-	(key == 123 || key == 0) ? right(al, 0) : 0;
+	(key == 126 || key == 13) ? axe_y(al, 1) : 0;
+	(key == 123 || key == 0) ? axe_x(al, 0) : 0;
 	(key == 125 || key == 1) ? axe_y(al, 0) : 0;
-	(key == 124 || key == 2) ? right(al, 1) : 0;
+	(key == 124 || key == 2) ? axe_x(al, 1) : 0;
 }
 
 int		ft_deal_key(int key, t_all *al)
@@ -44,7 +44,7 @@ int		ft_deal_key(int key, t_all *al)
 	else if (key == 49)
 	{
 		al->p.is_playing = 1;
-		ft_raycasting(al);
+		raycasting(al);
 	}
 	return (0);
 }
@@ -58,7 +58,7 @@ int		mouse_motion(int x, int y, t_all *al)
 	if (al->p.is_playing == 1)
 	{
 		al->p.c_o = (double)x / WIDTH * 6 + y * 0;
-		ft_raycasting(al);
+		raycasting(al);
 	}
 	return (0);
 }

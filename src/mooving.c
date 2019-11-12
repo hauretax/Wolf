@@ -6,7 +6,7 @@
 /*   By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 17:34:00 by hutricot          #+#    #+#             */
-/*   Updated: 2019/11/11 20:19:51 by hutricot         ###   ########.fr       */
+/*   Updated: 2019/11/12 15:24:02 by hutricot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	wall_hitbox(t_all *al, double x, double y)
 		al->p.pw++;
 		al->p.radian += M_PI / WIDTH * 3;
 	}
-	ft_raycasting(al);
+	raycasting(al);
 }
 
 void	axe_y(t_all *al, int a)
@@ -67,7 +67,7 @@ void	axe_y(t_all *al, int a)
 	}
 }
 
-void	right(t_all *al, int a)
+void	axe_x(t_all *al, int a)
 {
 	if (a == 1)
 	{

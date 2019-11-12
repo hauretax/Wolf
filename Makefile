@@ -6,7 +6,7 @@
 #    By: hutricot <hutricot@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/01 10:51:52 by hutricot          #+#    #+#              #
-#    Updated: 2019/11/11 18:03:00 by hutricot         ###   ########.fr        #
+#    Updated: 2019/11/12 13:00:23 by hutricot         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,8 @@ SRC_LIST = main.c			\
 			do_a_map.c		\
 			key.c			\
 			raycasting.c	\
-			mooving.c
+			mooving.c		\
+			draw.c
 
 SRC_DIR = ./src/
 SRC = $(addprefix $(SRC_DIR), $(SRC_LIST))

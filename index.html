@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Wolf3D en JS</title>
+    <style>
+        body {
+            margin: 0;
+            background: #333;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            justify-content: center;
+        }
+
+        /* Style du canvas de vision du joueur */
+        #gameCanvas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 600px;
+            background: #444;
+        }
+
+        /* Style du canvas de la minimap (en haut à gauche) */
+        #minimapCanvas {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 200px;
+            height: 200px;
+            border: 1px solid white;
+        }
+
+        /* Style du bouton de téléchargement (en bas au centre) */
+        #controls {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="minimapCanvas"></canvas>
+    <canvas id="gameCanvas"></canvas>
+    <div id="controls">
+        <input type="file" id="fileInput" onchange="handleFileUpload(event)" />
+        <input type="file" id="skyboxInput" onchange="handleSkyboxUpload(event)" />
+    </div>
+
+    <script>
+        const gameCanvas = document.getElementById('gameCanvas');
+        const gameCtx = gameCanvas.getContext('2d');
+        const minimapCanvas = document.getElementById('minimapCanvas');
+        const minimapCtx = minimapCanvas.getContext('2d');
+        let skyboxImage = null;
+
+        const WIDTH = 800;
+        const HEIGHT = 600;
+        gameCanvas.width = WIDTH;
+        gameCanvas.height = HEIGHT;
+        minimapCanvas.width = 200;
+        minimapCanvas.height = 200;
+
+        const TILE = 64; // Taille d'une case du monde
+
+        // Initialisation du joueur avec sa position, son angle et ses vitesses
+        const player = {
+            x: 0,
+            y: 0,
+            angle: Math.PI / 2, // Angle initial vers le nord (90°)
+            speed: 2,
+            rotSpeed: 0.05,
+        };
+
+        // Carte par défaut
+        let map = [
+            "0000000000",
+            "0111111110",
+            "0111x11110",
+            "0111111110",
+            "0111111110",
+            "0111111110",
+            "0111111110",
+            "0111111110",
+            "0000000000"
+        ];
+
+        const keys = {};
+
+        // Trouver la position du joueur (marquée par "x") dans la carte
+        function findPlayerStartPosition() {
+            for (let y = 0; y < map.length; y++) {
+                const x = map[y].indexOf('x');
+                if (x !== -1) {
+                    player.x = x * TILE + TILE / 2;
+                    player.y = y * TILE + TILE / 2;
+                    map[y] = map[y].replace('x', '1'); // Remplacer 'x' par '1'
+                    break;
+                }
+            }
+        }
+
+        window.addEventListener('keydown', e => keys[e.key] = true);
+        window.addEventListener('keyup', e => keys[e.key] = false);
+
+        // Mouvement du joueur
+        function movePlayer() {
+            // Déplacement avant
+            if (keys['ArrowUp'] || keys['w']) {
+                player.x += Math.cos(player.angle) * player.speed;
+                player.y += Math.sin(player.angle) * player.speed;
+                if (isWall(player.x, player.y)) {
+                    player.x -= Math.cos(player.angle) * player.speed;
+                    player.y -= Math.sin(player.angle) * player.speed;
+                }
+            }
+
+            // Déplacement arrière
+            if (keys['ArrowDown'] || keys['s']) {
+                player.x -= Math.cos(player.angle) * player.speed;
+                player.y -= Math.sin(player.angle) * player.speed;
+                if (isWall(player.x, player.y)) {
+                    player.x += Math.cos(player.angle) * player.speed;
+                    player.y += Math.sin(player.angle) * player.speed;
+                }
+            }
+
+            // Rotation à gauche
+            if (keys['ArrowLeft'] || keys['a']) {
+                player.angle -= player.rotSpeed;
+            }
+
+            // Rotation à droite
+            if (keys['ArrowRight'] || keys['d']) {
+                player.angle += player.rotSpeed;
+            }
+        }
+
+        // Vérification s'il y a un mur à une position donnée
+        function isWall(x, y) {
+            const mapX = Math.floor(x / TILE);
+            const mapY = Math.floor(y / TILE);
+            return map[mapY]?.[mapX] === '0';
+        }
+
+        // Fonction pour dessiner les rayons
+        function castRays() {
+            const FOV = Math.PI / 3;
+            const numRays = WIDTH;
+            const angleStep = FOV / numRays;
+
+            let rayAngle = player.angle - (FOV / 2);
+
+            for (let ray = 0; ray < numRays; ray++) {
+                let rayX = player.x;
+                let rayY = player.y;
+
+                const rayDirX = Math.cos(rayAngle);
+                const rayDirY = Math.sin(rayAngle);
+
+                let depth = 0;
+                let hit = false;
+                while (!hit && depth < 1000) {
+                    rayX += rayDirX;
+                    rayY += rayDirY;
+                    depth++;
+
+                    if (isWall(rayX, rayY)) {
+                        hit = true;
+                    }
+                }
+
+                const distance = depth * Math.cos(rayAngle - player.angle);
+                const wallHeight = (TILE * 500) / distance;
+
+                gameCtx.fillStyle = 'gray';
+                gameCtx.fillRect(ray, (HEIGHT / 2) - wallHeight / 2, 1, wallHeight);
+
+                rayAngle += angleStep;
+            }
+        }
+
+        // Dessiner la minimap
+        function drawMinimap() {
+            const minimapSize = 200; // Taille du canvas de la minimap
+            const mapWidth = map[0].length * TILE;  // Largeur réelle de la carte
+            const mapHeight = map.length * TILE;   // Hauteur réelle de la carte
+
+            // Calcul du facteur de mise à l'échelle pour que la carte tienne dans la minimap
+            const scaleX = minimapSize / mapWidth;
+            const scaleY = minimapSize / mapHeight;
+
+            // Choisir le facteur de mise à l'échelle le plus petit pour garder la proportion de la carte
+            const scale = Math.min(scaleX, scaleY);
+
+            // Calculer les offsets pour centrer la carte dans la minimap
+            const offsetX = (minimapSize - mapWidth * scale) / 2;
+            const offsetY = (minimapSize - mapHeight * scale) / 2;
+
+            minimapCtx.save();
+            minimapCtx.scale(scale, scale); // Mise à l'échelle
+
+            // Dessiner la carte
+            for (let y = 0; y < map.length; y++) {
+                for (let x = 0; x < map[y].length; x++) {
+                    minimapCtx.fillStyle = map[y][x] === '1' ? 'black' : 'white';
+                    minimapCtx.fillRect(x * TILE, y * TILE, TILE, TILE);
+                }
+            }
+
+            // Appliquer les offsets pour centrer la carte dans la minimap
+            minimapCtx.translate(offsetX, offsetY);
+
+            minimapCtx.fillStyle = 'red';
+            minimapCtx.beginPath();
+            minimapCtx.arc(player.x, player.y, 30, 0, Math.PI * 2);
+            minimapCtx.fill();
+
+            minimapCtx.strokeStyle = 'yellow';
+            minimapCtx.beginPath();
+            minimapCtx.moveTo(player.x, player.y);
+            minimapCtx.lineTo(player.x + Math.cos(player.angle - Math.PI / 6) * 40, player.y + Math.sin(player.angle - Math.PI / 6) * 40);
+            minimapCtx.moveTo(player.x, player.y);
+            minimapCtx.lineTo(player.x + Math.cos(player.angle + Math.PI / 6) * 40, player.y + Math.sin(player.angle + Math.PI / 6) * 40);
+            minimapCtx.stroke();
+
+            minimapCtx.restore();
+        }
+
+        // Boucle du jeu
+        function gameLoop() {
+            if (skyboxImage) {
+                const skyboxWidth = skyboxImage.width;
+                const skyboxHeight = skyboxImage.height;
+                const normalizedAngle = (player.angle % (Math.PI * 2)) / (Math.PI * 2);
+                const offsetX = normalizedAngle * (skyboxWidth - WIDTH);
+
+                gameCtx.drawImage(
+                    skyboxImage,
+                    offsetX, 0, WIDTH, skyboxHeight, 0, 0, WIDTH, HEIGHT / 2
+                );
+            } else {
+                gameCtx.fillStyle = '#87CEEB';
+                gameCtx.fillRect(0, 0, WIDTH, HEIGHT / 2);
+            }
+            gameCtx.fillStyle = '#555';
+            gameCtx.fillRect(0, HEIGHT / 2, WIDTH, HEIGHT / 2);
+            drawMinimap();
+            movePlayer();
+            castRays();
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                map = e.target.result.split('\n');
+                findPlayerStartPosition();
+                gameLoop();
+            };
+
+            reader.readAsText(file);
+        }
+
+        function handleSkyboxUpload(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = new Image();
+                img.onload = function () {
+                    skyboxImage = img;
+                    gameLoop();
+                };
+                img.src = e.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        findPlayerStartPosition();
+
+        // Utilisation de setInterval pour la boucle du jeu (30 FPS)
+        setInterval(gameLoop, 1000 / 60);
+    </script>
+</body>
+
+</html>
